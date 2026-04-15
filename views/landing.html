@@ -8,6 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Marcellus&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@300;400;600&display=swap" rel="stylesheet" />
 </head>
 <body class="min-h-screen overflow-x-hidden bg-[#0A0A0A] text-[#F2F0E4]">
     <main class="relative min-h-screen px-6 py-10">
@@ -53,6 +54,92 @@
                     <a href="https://github.com/VinayakTandon199/Dihadi-Hub" target="_blank" rel="noreferrer" class="inline-block border-b border-[#D4AF37] pb-1 text-sm uppercase tracking-[0.22em] text-[#D4AF37] transition hover:text-[#F2F0E4]">
                         GitHub Blueprint
                     </a>
+                </div>
+            </div>
+        </section>
+        <!-- OUR PHILOSOPHY - PRECISION OVER CHAOS -->
+        <section class="w-full mt-12 border-t border-[#D4AF37]/12">
+            <div class="mx-auto my-12 max-w-4xl text-center">
+                <h2 class="font-['Marcellus'] text-3xl uppercase tracking-[0.22em] text-[#D4AF37] md:text-4xl">
+                    PRECISION OVER CHAOS
+                </h2>
+
+                <div class="mt-8 px-6">
+                    <p class="mx-auto max-w-4xl text-lg leading-8" style="font-family: 'Josefin Sans', sans-serif; color: #F6EEDC;">
+                        At Dihadi-Hub we approach workforce deployment as a sustained act of design — an architecture of time,
+                        logistics, and human attention. Every roster, shift, and assignment is treated like an engineered subsystem
+                        whose interfaces must compose predictably under load. Our practice of zero-latency deployment reframes speed
+                        not as frantic haste but as an engineered guarantee: distribution pipelines, validation heuristics and
+                        resource topologies are modelled to deliver staff where and when they are required with deterministic
+                        reliability. This mindset minimizes contingency tax and unlocks operational cadence that clients can
+                        schedule against with confidence.
+                    </p>
+
+                    <p class="mx-auto mt-6 max-w-4xl text-lg leading-8" style="font-family: 'Josefin Sans', sans-serif; color: #F6EEDC;">
+                        Our systems are grounded in algorithmic trust — a discipline of transparent decisioning, auditability,
+                        and incentives that treat human contributors as agents within a crafted economy. We design allocation
+                        rules and verification layers so that the dignity of organized labor is preserved even as we optimize
+                        for throughput. The result is an ecosystem where precise orchestration and ethical practice reinforce
+                        one another: algorithmic assurances reduce friction, while humane operational contracts sustain the
+                        workforce long term.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- TECHNICAL ARCHITECTURE -->
+        <section class="w-full py-10">
+            <div class="mx-auto max-w-6xl px-6">
+                <div class="mx-auto max-w-5xl text-center">
+                    <p class="mb-4 text-xs uppercase tracking-[0.45em] text-[#D4AF37]/75">Technical Edge</p>
+                    <h2 class="font-['Marcellus'] text-3xl uppercase tracking-[0.22em] text-[#F2F0E4] md:text-4xl">TECHNICAL ARCHITECTURE</h2>
+                </div>
+
+                <div class="mt-8 grid gap-6 md:grid-cols-[1fr_1px_1fr] items-start">
+                    <div>
+                        <p class="text-base leading-8" style="font-family: 'Josefin Sans', sans-serif; color: #F6EEDC;">
+                            At the core of Dihadi-Hub lies a Node.js runtime orchestrating lightweight, event-driven services
+                            that interact with a MySQL relational store designed for predictable consistency. We treat relational
+                            data integrity as a first-class engineering constraint: normalized schemas, foreign-key constraints,
+                            and transactional patterns ensure that assignments, contracts, and attendance records remain
+                            atomic and auditable across concurrent operations. Connection pooling and prepared statement usage
+                            reduce latency variance, while careful indexing and targeted denormalization let us preserve read
+                            performance for join-heavy queries. On the security axis, session-based controls are layered with
+                            secure cookies, server-side session stores and token rotation so authentication boundaries remain
+                            impermeable even under scale. Together, these elements form a resilient stack where correctness,
+                            observability and low-latency behavior are engineered rather than hoped for.
+                        </p>
+                    </div>
+
+                    <div class="hidden md:block md:w-px bg-[#D4AF37]/25"></div>
+
+                    <div class="text-left">
+                        <ol class="space-y-6" style="font-family: 'Josefin Sans', sans-serif; color: #F6EEDC;">
+                            <li>
+                                <div class="mb-1 text-xs uppercase tracking-[0.35em] text-[#D4AF37]/80">I</div>
+                                <h3 class="font-['Marcellus'] text-lg uppercase tracking-[0.12em] text-[#D4AF37]">Optimized SQL Joins for Deployed Staff.</h3>
+                                <p class="mt-2 text-sm leading-6 text-[#F6EEDC]">Carefully constructed joins and materialized views minimize round-trips
+                                when resolving deployment rosters, contract terms and client mappings — ensuring queries that drive
+                                live deployment are both fast and predictable.</p>
+                            </li>
+
+                            <li>
+                                <div class="mb-1 text-xs uppercase tracking-[0.35em] text-[#D4AF37]/80">II</div>
+                                <h3 class="font-['Marcellus'] text-lg uppercase tracking-[0.12em] text-[#D4AF37]">Dynamic EJS Templating for Agency Branding.</h3>
+                                <p class="mt-2 text-sm leading-6 text-[#F6EEDC]">Server-side EJS templates render agency-specific
+                                branding and contracts at request-time, allowing rapid, SEO-friendly pages while keeping rendering
+                                logic centralized and cacheable.</p>
+                            </li>
+
+                            <li>
+                                <div class="mb-1 text-xs uppercase tracking-[0.35em] text-[#D4AF37]/80">III</div>
+                                <h3 class="font-['Marcellus'] text-lg uppercase tracking-[0.12em] text-[#D4AF37]">Fail-safe Attendance Logic with Timezone Correction.</h3>
+                                <p class="mt-2 text-sm leading-6 text-[#F6EEDC]">Attendance computations incorporate timezone-aware
+                                timestamps, idempotent event ingestion and reconciliation routines so edge-case clock skew and
+                                daylight saving transitions cannot corrupt payroll or deployment metrics.</p>
+                            </li>
+                        </ol>
+                    </div>
                 </div>
             </div>
         </section>
