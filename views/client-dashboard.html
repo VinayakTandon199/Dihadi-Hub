@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Client Dashboard</title>
   <style>
+  @import url("https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@400;600;700&family=Marcellus&display=swap");
+
   :root {
     --navbar-height: 74px;
     --ink-900: #0f172a;
@@ -33,22 +35,25 @@
 
   body {
     margin: 0;
-    font-family: "Trebuchet MS", "Segoe UI", "Gill Sans", sans-serif;
-    color: var(--ink-900);
+    font-family: "Josefin Sans", "Segoe UI", sans-serif;
+    color: #f2e7c5;
     min-height: 100vh;
-    background:
-      radial-gradient(circle at 12% 18%, rgba(255, 138, 0, 0.34), transparent 36%),
-      radial-gradient(circle at 82% 22%, rgba(255, 61, 129, 0.22), transparent 34%),
-      radial-gradient(circle at 20% 74%, rgba(16, 185, 129, 0.2), transparent 37%),
-      radial-gradient(circle at 88% 58%, rgba(139, 92, 246, 0.2), transparent 38%),
-      radial-gradient(circle at 70% 85%, rgba(14, 165, 233, 0.24), transparent 40%),
-      radial-gradient(circle at 50% 45%, rgba(59, 130, 246, 0.16), transparent 42%),
-      linear-gradient(135deg, #fff8ee 0%, #fff2f8 24%, #f0f6ff 52%, #e9f7ff 78%, #f3fffb 100%);
+    background: #0a0a0a;
     background-attachment: fixed;
     background-size: 150% 150%;
     overflow-x: hidden;
     position: relative;
-    animation: pageGradient 15s ease-in-out infinite alternate;
+    animation: none;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: "Marcellus", serif;
+    letter-spacing: 0.05em;
   }
 
   body::before,
@@ -150,20 +155,21 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    border-radius: 18px;
-    border: 1px solid rgba(255, 255, 255, 0.42);
-    background: linear-gradient(120deg, rgba(30, 41, 59, 0.8), rgba(79, 70, 229, 0.74));
+    border-radius: 0;
+    border: 1px solid #0a0a0a;
+    border-bottom: 2px solid #d4af37;
+    background: #050505;
     backdrop-filter: blur(12px);
     box-shadow: var(--shadow-soft);
   }
 
   .navbar-title {
     margin: 0;
-    color: #fff;
+    color: #d4af37;
     font-size: 1.22rem;
-    letter-spacing: 0.6px;
+    letter-spacing: 1.2px;
     text-transform: uppercase;
-    font-weight: 800;
+    font-weight: 400;
   }
 
   .navbar-right {
@@ -195,7 +201,7 @@
     flex: 1;
     min-width: 0;
     margin: 0;
-    padding: 0 0 20px;
+    padding: 32px;
   }
 
   .content-shell {
@@ -203,7 +209,7 @@
     margin: 22px auto 34px;
     display: flex;
     align-items: flex-start;
-    gap: 18px;
+    gap: 24px;
   }
 
   .sidebar {
@@ -212,10 +218,11 @@
     position: sticky;
     top: var(--navbar-height);
     height: calc(100vh - var(--navbar-height));
-    background: #ffffff;
-    border: 1px solid rgba(37, 99, 235, 0.14);
-    border-radius: 16px;
-    box-shadow: 0 10px 28px rgba(37, 99, 235, 0.14);
+    background: #0d0d0d;
+    border: 1px solid rgba(212, 175, 55, 0.5);
+    border-right: 1px solid rgba(212, 175, 55, 0.1);
+    border-radius: 0;
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.5);
     padding: 16px 12px;
     overflow-y: auto;
   }
@@ -224,7 +231,7 @@
     margin: 2px 8px 12px;
     font-size: 12px;
     font-weight: 700;
-    color: #6b7280;
+    color: #d4af37;
     letter-spacing: 0.6px;
     text-transform: uppercase;
   }
@@ -236,7 +243,7 @@
 
   .sidebar-item {
     width: 100%;
-    border: none;
+    border: 1px solid #d4af37;
     background: transparent;
     display: flex;
     align-items: center;
@@ -245,20 +252,20 @@
     padding: 14px 20px;
     font-size: 15px;
     font-weight: 700;
-    color: #1e3a5f;
-    border-radius: 10px;
+    color: #d4af37;
+    border-radius: 0;
     cursor: pointer;
-    transition: background-color 0.25s ease, color 0.25s ease, transform 0.2s ease;
+    transition: background-color 0.25s ease, color 0.25s ease;
   }
 
   .sidebar-item:hover {
-    background: #e8f0fe;
-    transform: translateX(2px);
+    background: #d4af37;
+    color: #050505;
   }
 
   .sidebar-item.active {
-    background: #2563eb;
-    color: #ffffff;
+    background: rgba(212, 175, 55, 0.16);
+    color: #d4af37;
   }
 
   .sidebar-icon {
@@ -1063,34 +1070,234 @@
   .staff-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 20px;
+    gap: 32px;
     margin-bottom: 20px;
   }
 
   .staff-card {
-    background: white;
-    border-radius: 16px;
+    background: #141414;
+    border-radius: 0;
     padding: 24px;
-    border: 1px solid rgba(37,99,235,0.12);
-    box-shadow: 0 4px 16px rgba(37,99,235,0.08);
+    border: 1px solid rgba(212, 175, 55, 0.5);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
     transition: all 0.3s ease;
     position: relative;
     overflow: hidden;
+    clip-path: polygon(
+      0 0,
+      calc(100% - 18px) 0,
+      calc(100% - 18px) 6px,
+      calc(100% - 6px) 6px,
+      calc(100% - 6px) 18px,
+      100% 18px,
+      100% 100%,
+      18px 100%,
+      18px calc(100% - 6px),
+      6px calc(100% - 6px),
+      6px calc(100% - 18px),
+      0 calc(100% - 18px)
+    );
   }
 
   .staff-card::before {
-    content: '';
+    content: "";
     position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 4px;
-    background: linear-gradient(135deg, #2563eb, #06b6d4);
+    inset: 0;
+    border: 1px solid rgba(212, 175, 55, 0.25);
+    pointer-events: none;
   }
 
   .staff-card:hover {
     transform: translateY(-4px);
-    box-shadow: 0 12px 32px rgba(37,99,235,0.15);
+    box-shadow: 0 12px 32px rgba(212, 175, 55, 0.12);
+  }
+
+  /* Global button language: sharp-cornered gold boxes with black text. */
+  button,
+  .btn,
+  .dismiss-btn,
+  .attendance-btn,
+  .cal-nav-btn,
+  .submit-contract-btn,
+  .cart-float-btn,
+  .qty-btn,
+  .icon-btn,
+  .popup-btn,
+  .cart-close-btn,
+  .logout-btn,
+  #invoice-close-btn,
+  #checkout-btn,
+  #submit-contract-btn,
+  #view-cart-btn {
+    border-radius: 0 !important;
+    border: 1px solid #d4af37 !important;
+    background: #d4af37 !important;
+    color: #0a0a0a !important;
+    box-shadow: none !important;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    font-weight: 700 !important;
+  }
+
+  button:hover,
+  .btn:hover,
+  .dismiss-btn:hover,
+  .attendance-btn:hover,
+  .cal-nav-btn:hover,
+  .submit-contract-btn:hover,
+  .cart-float-btn:hover,
+  .qty-btn:hover,
+  .icon-btn:hover,
+  .popup-btn:hover,
+  .cart-close-btn:hover,
+  .logout-btn:hover,
+  #invoice-close-btn:hover,
+  #checkout-btn:hover,
+  #submit-contract-btn:hover,
+  #view-cart-btn:hover {
+    background: #f0cd5d !important;
+    color: #0a0a0a !important;
+    transform: none !important;
+    filter: none !important;
+  }
+
+  .staff-name,
+  .staff-info-row,
+  .new-contract-title,
+  .marketplace-title,
+  .cart-modal-title,
+  .invoice-title,
+  .page-title,
+  .subheading,
+  .empty-title {
+    color: #d4af37;
+  }
+
+  .page-title {
+    border-radius: 0;
+    background: transparent;
+    border: 1px solid rgba(212, 175, 55, 0.6);
+    box-shadow: none;
+    animation: none;
+  }
+
+  .contract-card,
+  .empty-card,
+  .new-contract-card,
+  .marketplace-panel,
+  .calendar-container,
+  .cart-modal-card,
+  .invoice-card,
+  .attendance-popup,
+  .salary-summary {
+    border-radius: 0;
+    background: #101010;
+    border-color: rgba(212, 175, 55, 0.35);
+    color: #e7dbb0;
+    box-shadow: none;
+  }
+
+  .contract-card,
+  .staff-card,
+  .info-item,
+  .new-contract-card,
+  .marketplace-panel,
+  .calendar-container,
+  .cart-modal-card,
+  .invoice-card,
+  .attendance-popup,
+  .salary-summary,
+  .empty-card {
+    box-shadow: 0 0 10px rgba(212, 175, 55, 0.1) !important;
+  }
+
+  .contract-card:hover,
+  .staff-card:hover,
+  .info-item:hover,
+  .new-contract-card:hover,
+  .marketplace-panel:hover,
+  .calendar-container:hover,
+  .cart-modal-card:hover,
+  .invoice-card:hover,
+  .attendance-popup:hover,
+  .salary-summary:hover,
+  .empty-card:hover {
+    box-shadow: 0 0 10px rgba(212, 175, 55, 0.12) !important;
+  }
+
+  .sidebar-item {
+    background: transparent;
+    border-left: 4px solid transparent;
+  }
+
+  .sidebar-item.active {
+    background: transparent;
+    border-left-color: #d4af37;
+    color: #d4af37;
+  }
+
+  .sidebar-item:hover {
+    background: rgba(212, 175, 55, 0.08);
+    color: #f2f0e4;
+  }
+
+  .attendance-btn {
+    background: transparent !important;
+    color: #d4af37 !important;
+    border: 2px solid #d4af37 !important;
+    box-shadow: none !important;
+  }
+
+  .attendance-btn:hover {
+    background: #d4af37 !important;
+    color: #0a0a0a !important;
+    box-shadow: 0 0 10px rgba(212, 175, 55, 0.18) !important;
+  }
+
+  .info-item {
+    background: #141414;
+    border: 1px solid rgba(212, 175, 55, 0.2);
+    border-radius: 0;
+    color: #f2f0e4;
+    box-shadow: none;
+  }
+
+  .info-item:hover {
+    border-color: rgba(212, 175, 55, 0.3);
+    box-shadow: none;
+  }
+
+  .label {
+    display: block;
+    margin-bottom: 2px;
+    color: rgba(212, 175, 55, 0.78);
+    font-size: 0.66rem;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    font-weight: 600;
+  }
+
+  .value {
+    color: #f2f0e4;
+    font-size: 0.95rem;
+    font-weight: 700;
+    word-break: break-word;
+  }
+
+  .staff-name,
+  .staff-info-row,
+  .empty-subtext,
+  .salary-value,
+  .calendar-month-title,
+  .invoice-meta,
+  .cart-total-value,
+  .subheading,
+  .value {
+    color: #f2f0e4;
+  }
+
+  .staff-info-icon {
+    color: #d4af37;
   }
 
   .staff-avatar {
@@ -1109,7 +1316,6 @@
 
   .staff-name {
     font-weight: 700;
-    color: #1e3a5f;
     font-size: 18px;
     margin-bottom: 12px;
   }
@@ -1120,7 +1326,7 @@
     gap: 8px;
     margin-bottom: 8px;
     font-size: 13px;
-    color: #4b5563;
+    color: #f2f0e4;
   }
 
   .staff-info-icon {
@@ -1165,13 +1371,13 @@
   }
 
   .calendar-container {
-    background: white;
+    background: #141414;
     border-radius: 16px;
-    border: 1px solid rgba(37,99,235,0.1);
+    border: 1px solid rgba(212, 175, 55, 0.2);
     padding: 24px;
     margin-top: 16px;
     display: none;
-    box-shadow: 0 4px 20px rgba(37,99,235,0.08);
+    box-shadow: none;
     grid-column: 1 / -1;
   }
 
@@ -1181,12 +1387,12 @@
     align-items: center;
     margin-bottom: 20px;
     padding-bottom: 16px;
-    border-bottom: 1px solid rgba(37,99,235,0.1);
+    border-bottom: 1px solid rgba(212, 175, 55, 0.18);
   }
 
   .calendar-month-title {
     font-weight: 700;
-    color: #1e3a5f;
+    color: #f2f0e4;
     font-size: 20px;
   }
 
@@ -1271,10 +1477,10 @@
 
   .attendance-popup {
     position: fixed;
-    background: white;
-    border: 1px solid #e5e7eb;
+    background: #141414;
+    border: 1px solid rgba(212, 175, 55, 0.2);
     border-radius: 12px;
-    box-shadow: 0 12px 40px rgba(0,0,0,0.15);
+    box-shadow: none;
     z-index: 1000;
     padding: 12px;
     display: flex;
@@ -1286,10 +1492,10 @@
   .popup-title {
     font-size: 12px;
     font-weight: 600;
-    color: #6b7280;
+    color: rgba(212, 175, 55, 0.78);
     text-align: center;
     padding-bottom: 8px;
-    border-bottom: 1px solid #f3f4f6;
+    border-bottom: 1px solid rgba(212, 175, 55, 0.18);
   }
 
   .popup-btn {
@@ -1320,21 +1526,22 @@
   .popup-btn.absent:hover { background: #fecaca; }
 
   .salary-summary {
-    background: linear-gradient(135deg, #1e3a5f, #2563eb);
+    background: #141414;
     border-radius: 16px;
     padding: 24px;
     margin-top: 20px;
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 16px;
-    color: white;
+    color: #f2f0e4;
+    border: 1px solid rgba(212, 175, 55, 0.2);
   }
 
   .salary-item { text-align: center; }
 
   .salary-label {
     font-size: 11px;
-    color: rgba(255,255,255,0.7);
+    color: rgba(212, 175, 55, 0.75);
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.8px;
@@ -1344,7 +1551,7 @@
   .salary-value {
     font-size: 24px;
     font-weight: 800;
-    color: white;
+    color: #f2f0e4;
   }
 
   .salary-value.present { color: #86efac; }
@@ -1358,7 +1565,7 @@
 
   .salary-total-row {
     grid-column: 1 / -1;
-    border-top: 1px solid rgba(255,255,255,0.2);
+    border-top: 1px solid rgba(212, 175, 55, 0.18);
     padding-top: 16px;
     margin-top: 4px;
     text-align: center;
@@ -1544,7 +1751,7 @@
 </head>
 <body>
   <nav class="navbar">
-    <h1 class="navbar-title">Agency Management System</h1>
+    <h1 class="navbar-title">Client Command Center</h1>
     <div class="navbar-right">
       <span id="clientUsername">Loading user...</span>
       <a class="logout-btn" href="/auth/logout">Logout</a>
@@ -2681,6 +2888,11 @@
         invoiceDeliveryMessageEl.textContent = "Estimated delivery: " + String(deliveryTime || "Soon");
       }
 
+      if (invoiceCloseBtn) {
+        invoiceCloseBtn.dataset.receiptId = String(orderId || "");
+        invoiceCloseBtn.textContent = "Download Receipt";
+      }
+
       invoiceModal.style.display = "flex";
     }
 
@@ -2971,7 +3183,18 @@
 
       if (invoiceCloseBtn) {
         invoiceCloseBtn.addEventListener("click", () => {
-          window.print();
+          const receiptId = String(invoiceCloseBtn.dataset.receiptId || "").trim();
+          if (!receiptId) {
+            alert("Receipt is not ready yet.");
+            return;
+          }
+
+          const link = document.createElement("a");
+          link.href = "/client/marketplace/receipt/" + encodeURIComponent(receiptId);
+          link.download = "receipt.pdf";
+          document.body.appendChild(link);
+          link.click();
+          link.remove();
           closeInvoiceAndReset();
         });
       }

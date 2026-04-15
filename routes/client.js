@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const db = require('../config/db');
 const path = require('path');
+const PDFDocument = require('pdfkit');
 
 function isClient(req, res, next) {
     if (!req.session.user) {
@@ -614,6 +615,201 @@ router.post('/marketplace/order', isClient, (req, res) => {
     } catch (err) {
         console.error(err);
         return res.status(500).json({ success: false, message: 'Unexpected server error while placing order' });
+    }
+});
+
+router.get('/marketplace/receipt/:id', isClient, async (req, res) => {
+    try {
+        const orderId = Number(req.params.id);
+        const clientId = req.session.user?.id || req.session.user_id;
+
+        if (!Number.isInteger(orderId) || orderId <= 0) {
+            return res.status(400).json({ success: false, message: 'Invalid receipt id' });
+        }
+
+        const orderRows = await runQuery(
+            `SELECT
+                mo.id,
+                mo.client_id,
+                mo.total_price,
+                mo.store_type,
+                mo.delivery_time,
+                mo.status,
+                mo.created_at,
+                u.username AS client_username
+             FROM marketplace_orders mo
+             JOIN users u ON mo.client_id = u.id
+             WHERE mo.id = ? AND mo.client_id = ?
+             LIMIT 1`,
+            [orderId, clientId]
+        );
+
+        if (!orderRows.length) {
+            return res.status(404).json({ success: false, message: 'Receipt not found' });
+        }
+
+        const order = orderRows[0];
+
+        const itemRows = await runQuery(
+            `SELECT
+                oi.quantity,
+                oi.price_at_purchase,
+                mi.name,
+                mi.category
+             FROM order_items oi
+             JOIN marketplace_items mi ON oi.item_id = mi.id
+             WHERE oi.order_id = ?
+             ORDER BY mi.name ASC`,
+            [orderId]
+        );
+
+        res.setHeader('Content-Type', 'application/pdf');
+        res.setHeader('Content-Disposition', 'attachment; filename=receipt.pdf');
+
+        const document = new PDFDocument({ size: 'A4', margin: 42, bufferPages: true });
+        document.pipe(res);
+
+        const ink = '#101827';
+        const mutedInk = '#374151';
+        const line = '#D1D5DB';
+        const headerBlue = '#0F2A4D';
+
+        const formatShortDate = (dateInput) => {
+            const d = new Date(dateInput);
+            const day = String(d.getDate());
+            const month = String(d.getMonth() + 1);
+            const year = String(d.getFullYear());
+            return `${day}/${month}/${year}`;
+        };
+
+        const pageLeft = 42;
+        const pageRight = 553;
+
+        document.save();
+        document.fillColor('#FFFFFF');
+        document.rect(0, 0, document.page.width, document.page.height).fill();
+        document.restore();
+
+        document.fillColor(ink).font('Helvetica-Bold').fontSize(11).text('FROM', pageLeft, 52);
+        document.font('Helvetica').fontSize(10).fillColor(mutedInk);
+        document.text('Dihadi-Hub Agency', pageLeft, 70);
+        document.text('Agency Management System', pageLeft, 86);
+
+        document.fillColor(headerBlue).font('Helvetica-Bold').fontSize(24).text('RECEIPT', 360, 52, {
+            width: 193,
+            align: 'right'
+        });
+        document.fillColor(ink).font('Helvetica').fontSize(10).text(`Receipt #: ${order.id}`, 360, 82, {
+            width: 193,
+            align: 'right'
+        });
+        document.text(`Date: ${formatShortDate(order.created_at)}`, 360, 98, {
+            width: 193,
+            align: 'right'
+        });
+
+        document.strokeColor(line).lineWidth(1);
+        document.moveTo(pageLeft, 128).lineTo(pageRight, 128).stroke();
+
+        document.fillColor(ink).font('Helvetica-Bold').fontSize(11).text('TO', pageLeft, 146);
+        document.font('Helvetica').fontSize(10).fillColor(mutedInk);
+        document.text(order.client_username || 'client2', pageLeft, 164);
+
+        const tableTop = 206;
+        const rowHeight = 26;
+        const colWidths = [60, 255, 98, 98];
+        const colX = [
+            pageLeft,
+            pageLeft + colWidths[0],
+            pageLeft + colWidths[0] + colWidths[1],
+            pageLeft + colWidths[0] + colWidths[1] + colWidths[2]
+        ];
+
+        document.fillColor('#F8FAFC').strokeColor(line).lineWidth(1);
+        document.rect(pageLeft, tableTop, pageRight - pageLeft, rowHeight).fillAndStroke();
+
+        document.fillColor(ink).font('Helvetica-Bold').fontSize(9);
+        document.text('QTY', colX[0] + 6, tableTop + 9, { width: colWidths[0] - 12, align: 'center' });
+        document.text('DESCRIPTION', colX[1] + 6, tableTop + 9, { width: colWidths[1] - 12 });
+        document.text('UNIT PRICE', colX[2] + 6, tableTop + 9, { width: colWidths[2] - 12, align: 'right' });
+        document.text('TOTAL', colX[3] + 6, tableTop + 9, { width: colWidths[3] - 12, align: 'right' });
+
+        let currentY = tableTop + rowHeight;
+        let subtotal = 0;
+
+        if (!itemRows.length) {
+            document.strokeColor(line).lineWidth(1);
+            document.rect(pageLeft, currentY, pageRight - pageLeft, rowHeight).stroke();
+            document.fillColor(mutedInk).font('Helvetica').fontSize(10).text('No items found', pageLeft + 10, currentY + 8);
+            currentY += rowHeight;
+        } else {
+            itemRows.forEach((item) => {
+                // Explicit field mapping for the white receipt template:
+                // DESCRIPTION <- item.name (e.g., "Masonry Thread (90m)")
+                // QTY <- item.quantity (e.g., 1)
+                // UNIT PRICE <- item.price_at_purchase (e.g., 1100.00)
+                // TOTAL <- quantity * unitPrice (e.g., 1100.00)
+                const description = String(item.name || '');
+                const quantity = Number(item.quantity || 0);
+                const unitPrice = Number(item.price_at_purchase || 0);
+                const lineTotal = quantity * unitPrice;
+                subtotal += lineTotal;
+
+                document.strokeColor(line).lineWidth(1);
+                document.rect(pageLeft, currentY, pageRight - pageLeft, rowHeight).stroke();
+
+                document.fillColor(mutedInk).font('Helvetica').fontSize(9);
+                document.text(String(quantity), colX[0] + 6, currentY + 9, { width: colWidths[0] - 12, align: 'center' });
+                document.text(description || 'Item', colX[1] + 6, currentY + 9, { width: colWidths[1] - 12 });
+                document.text(unitPrice.toFixed(2), colX[2] + 6, currentY + 9, { width: colWidths[2] - 12, align: 'right' });
+                document.text(lineTotal.toFixed(2), colX[3] + 6, currentY + 9, { width: colWidths[3] - 12, align: 'right' });
+
+                currentY += rowHeight;
+            });
+        }
+
+        const grandTotal = Number(order.total_price || subtotal || 0);
+        let salesTax = grandTotal - subtotal;
+        if (salesTax < 0) salesTax = 0;
+
+        const summaryStartY = Math.max(currentY + 22, 590);
+        const labelX = 408;
+        const valueWidth = 145;
+
+        document.fillColor(mutedInk).font('Helvetica').fontSize(10).text('Subtotal', labelX, summaryStartY, {
+            width: 80,
+            align: 'left'
+        });
+        document.text(subtotal.toFixed(2), pageRight - valueWidth, summaryStartY, {
+            width: valueWidth,
+            align: 'right'
+        });
+
+        document.text('Sales Tax', labelX, summaryStartY + 18, {
+            width: 80,
+            align: 'left'
+        });
+        document.text(salesTax.toFixed(2), pageRight - valueWidth, summaryStartY + 18, {
+            width: valueWidth,
+            align: 'right'
+        });
+
+        document.strokeColor(line).lineWidth(1);
+        document.moveTo(labelX, summaryStartY + 41).lineTo(pageRight, summaryStartY + 41).stroke();
+
+        document.fillColor(ink).font('Helvetica-Bold').fontSize(11).text('Grand Total', labelX, summaryStartY + 50, {
+            width: 90,
+            align: 'left'
+        });
+        document.text(grandTotal.toFixed(2), pageRight - valueWidth, summaryStartY + 50, {
+            width: valueWidth,
+            align: 'right'
+        });
+
+        document.end();
+    } catch (err) {
+        console.error('Marketplace receipt error:', err.message);
+        return res.status(500).json({ success: false, message: 'Failed to generate receipt' });
     }
 });
 

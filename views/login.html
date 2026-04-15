@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Agency Management System - Login</title>
     <style>
+        @import url("https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@400;600;700&family=Marcellus&display=swap");
+
         * {
             margin: 0;
             padding: 0;
@@ -12,15 +14,28 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-            background: #0d1b2a;
-            color: #fff;
+            font-family: "Josefin Sans", "Segoe UI", sans-serif;
+            background: #0a0a0a;
+            color: #f2e7c5;
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
             padding: 20px;
             overflow: hidden;
+            position: relative;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            background:
+                linear-gradient(90deg, rgba(212, 175, 55, 0.06) 1px, transparent 1px),
+                linear-gradient(rgba(212, 175, 55, 0.04) 1px, transparent 1px);
+            background-size: 72px 72px;
+            z-index: -1;
         }
 
         #particles-canvas {
@@ -35,43 +50,35 @@
         .card {
             width: 100%;
             max-width: 420px;
-            background: rgba(13, 27, 42, 0.42);
-            backdrop-filter: blur(18px) saturate(140%);
-            -webkit-backdrop-filter: blur(18px) saturate(140%);
-            border: 1px solid rgba(0, 212, 255, 0.3);
-            border-radius: 20px;
+            background: transparent;
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            border-radius: 0;
             padding: 40px;
-            box-shadow: 0 25px 45px rgba(0, 0, 0, 0.4), 0 0 80px rgba(0, 212, 255, 0.08);
+            box-shadow: none;
             position: relative;
-            animation: cardGlow 3s ease-in-out infinite;
-        }
-
-        @keyframes cardGlow {
-            0%, 100% {
-                box-shadow: 0 25px 45px rgba(0, 0, 0, 0.4), 0 0 80px rgba(0, 212, 255, 0.08);
-                border-color: rgba(0, 212, 255, 0.3);
-            }
-            50% {
-                box-shadow: 0 25px 45px rgba(0, 0, 0, 0.4), 0 0 95px rgba(0, 212, 255, 0.16);
-                border-color: rgba(0, 212, 255, 0.4);
-            }
+            backdrop-filter: none;
+            -webkit-backdrop-filter: none;
         }
 
         h1 {
+            font-family: "Marcellus", serif;
             font-size: 1.8rem;
-            font-weight: 700;
+            font-weight: 400;
             text-align: center;
             margin-bottom: 8px;
-            color: #ffffff;
-            text-shadow: 0 0 30px rgba(0, 212, 255, 0.8), 0 0 60px rgba(0, 212, 255, 0.4);
-            letter-spacing: 0.5px;
+            color: #d4af37;
+            letter-spacing: 1.8px;
+            text-transform: uppercase;
+            text-shadow: none;
         }
 
         .subtitle {
             text-align: center;
-            color: #a0d4e8;
+            color: rgba(212, 175, 55, 0.75);
             font-size: 0.95rem;
             margin-bottom: 32px;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
         }
 
         .message {
@@ -85,15 +92,15 @@
         }
 
         .message.error {
-            background: rgba(255, 50, 50, 0.15);
-            border: 1px solid rgba(255, 50, 50, 0.3);
-            color: #ff6b6b;
+            background: rgba(127, 29, 29, 0.2);
+            border: 1px solid rgba(220, 38, 38, 0.4);
+            color: #fca5a5;
         }
 
         .message.success {
-            background: rgba(50, 255, 100, 0.15);
-            border: 1px solid rgba(50, 255, 100, 0.3);
-            color: #4ade80;
+            background: rgba(22, 101, 52, 0.22);
+            border: 1px solid rgba(74, 222, 128, 0.4);
+            color: #86efac;
         }
 
         .form-group {
@@ -103,68 +110,82 @@
         label {
             display: block;
             margin-bottom: 8px;
-            color: #c8e6f0;
-            font-size: 0.9rem;
-            font-weight: 500;
+            color: #d4af37;
+            font-size: 0.78rem;
+            font-weight: 700;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
         }
 
         input,
         select {
             width: 100%;
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(0, 212, 255, 0.2);
-            border-radius: 10px;
-            padding: 14px 18px;
-            color: #ffffff;
+            background: transparent;
+            border: none;
+            border-bottom: 2px solid rgba(212, 175, 55, 0.95);
+            border-radius: 0;
+            padding: 12px 2px;
+            color: #f5e7bd;
             font-size: 0.95rem;
             outline: none;
-            transition: all 0.3s ease;
+            transition: border-color 0.25s ease, box-shadow 0.25s ease;
         }
 
         input::placeholder,
         select::placeholder {
-            color: rgba(255, 255, 255, 0.5);
+            color: rgba(245, 231, 189, 0.45);
         }
 
         input:focus,
         select:focus {
-            border-color: #00d4ff;
-            background: rgba(255, 255, 255, 0.1);
-            box-shadow: 0 0 15px rgba(0, 212, 255, 0.4), inset 0 0 10px rgba(0, 212, 255, 0.1);
+            border-bottom-color: #f5d77a;
+            box-shadow: 0 10px 16px -14px rgba(245, 215, 122, 0.8);
         }
 
         select {
             appearance: none;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='rgba(255,255,255,0.6)' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='rgba(212,175,55,0.9)' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
             background-repeat: no-repeat;
-            background-position: right 12px center;
-            padding-right: 36px;
+            background-position: right 2px center;
+            padding-right: 26px;
         }
 
         option {
-            background: #1a1a2e;
-            color: #fff;
+            background: #0a0a0a;
+            color: #f5e7bd;
         }
 
         button {
             width: 100%;
             padding: 14px;
             margin-top: 28px;
-            background: linear-gradient(135deg, #00e5ff, #0088ff);
-            border: none;
-            border-radius: 10px;
-            color: #ffffff;
+            background: #d4af37;
+            border: 1px solid #d4af37;
+            border-radius: 0;
+            color: #0a0a0a;
             font-size: 1rem;
             font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
             cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(0, 212, 255, 0.2);
+            transition: box-shadow 0.25s ease, transform 0.25s ease;
+            box-shadow: none;
+        }
+
+        @keyframes goldPulse {
+            0%,
+            100% {
+                box-shadow: 0 0 0 rgba(212, 175, 55, 0), 0 0 0 rgba(212, 175, 55, 0);
+            }
+            50% {
+                box-shadow: 0 0 20px rgba(212, 175, 55, 0.5), 0 0 36px rgba(212, 175, 55, 0.24);
+            }
         }
 
         button:hover {
-            background: linear-gradient(135deg, #0088ff, #00e5ff);
-            transform: scale(1.02);
-            box-shadow: 0 0 30px rgba(0, 229, 255, 0.6);
+            background: #e5c65c;
+            transform: translateY(-1px);
+            animation: goldPulse 1.2s ease-in-out infinite;
         }
 
         button:active {
@@ -174,19 +195,19 @@
         .footer-text {
             text-align: center;
             margin-top: 24px;
-            color: #aaa;
+            color: rgba(245, 231, 189, 0.75);
             font-size: 0.9rem;
         }
 
         .footer-text a {
-            color: #00e5ff;
+            color: #d4af37;
             text-decoration: none;
             transition: all 0.3s ease;
         }
 
         .footer-text a:hover {
             text-decoration: underline;
-            text-shadow: 0 0 10px rgba(0, 229, 255, 0.5);
+            text-shadow: 0 0 10px rgba(212, 175, 55, 0.35);
         }
 
         @media (max-width: 600px) {
@@ -224,7 +245,7 @@
     <canvas id="particles-canvas"></canvas>
 
     <div class="card">
-        <h1>Agency Management System</h1>
+        <h1>LOGIN TO THE EMPIRE</h1>
         <p class="subtitle">Login to your account</p>
 
         <div id="messageBox" class="message"></div>
@@ -265,7 +286,7 @@
         </form>
 
         <p class="footer-text">
-            Don't have an account? <a href="/views/register.html">Register here</a>
+            Don't have an account? <a href="/register.html">Register here</a>
         </p>
     </div>
 
@@ -301,7 +322,7 @@
                         vy: (Math.random() - 0.5) * 0.5,
                         radius: Math.random() * 1.5 + 1.5,
                         opacity: Math.random() * 0.3 + 0.7,
-                        color: ['#00ffff', '#00bfff', '#7df9ff'][Math.floor(Math.random() * 3)]
+                        color: ['#d4af37', '#f2d274', '#c89b2a'][Math.floor(Math.random() * 3)]
                     });
                 }
             }
@@ -345,7 +366,7 @@
             }
 
             draw() {
-                this.ctx.fillStyle = '#0d1b2a';
+                this.ctx.fillStyle = '#0a0a0a';
                 this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
 
                 // Draw lines between nearby particles
@@ -356,7 +377,7 @@
                         const distance = Math.sqrt(dx * dx + dy * dy);
 
                         if (distance < 120) {
-                            this.ctx.strokeStyle = `rgba(0, 212, 255, ${(1 - distance / 120) * 0.45})`;
+                            this.ctx.strokeStyle = `rgba(212, 175, 55, ${(1 - distance / 120) * 0.35})`;
                             this.ctx.lineWidth = 1;
                             this.ctx.beginPath();
                             this.ctx.moveTo(this.particles[i].x, this.particles[i].y);

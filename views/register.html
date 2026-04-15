@@ -4,293 +4,235 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Agency Management System - Register</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Marcellus&family=Josefin+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
     <style>
+        :root {
+            --obsidian: #0a0a0a;
+            --cream: #f2f0e4;
+            --gold: #d4af37;
+            --gold-soft: rgba(212, 175, 55, 0.2);
+            --gold-glow: rgba(212, 175, 55, 0.32);
+        }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
 
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-            background: #0d1b2a;
-            color: #fff;
-            min-height: 100vh;
-            height: auto;
-            display: flex;
-            align-items: flex-start;
-            justify-content: center;
-            padding: 40px 20px;
-            overflow-y: auto;
-            overflow-x: hidden;
-            box-sizing: border-box;
+        html, body {
+            min-height: 100%;
         }
 
-        #particles-canvas {
+        body {
+            font-family: 'Josefin Sans', sans-serif;
+            background:
+                linear-gradient(135deg, rgba(212, 175, 55, 0.02) 0 2px, transparent 2px 16px),
+                linear-gradient(45deg, rgba(212, 175, 55, 0.02) 0 2px, transparent 2px 16px),
+                var(--obsidian);
+            background-size: 22px 22px, 22px 22px, auto;
+            color: var(--cream);
+            min-height: 100vh;
+            padding: 32px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
+            inset: 0;
+            pointer-events: none;
+            background: radial-gradient(circle at top, rgba(212, 175, 55, 0.08), transparent 36%);
         }
 
         .card {
             width: 100%;
-            max-width: 420px;
-            height: auto;
-            max-height: none;
-            overflow: visible;
-            margin: auto;
-            background: rgba(255, 255, 255, 0.12);
-            backdrop-filter: blur(30px) saturate(180%);
-            border: 1px solid rgba(0, 212, 255, 0.3);
-            border-radius: 20px;
-            padding: 40px;
-            box-shadow: 0 25px 45px rgba(0, 0, 0, 0.4), 0 0 80px rgba(0, 212, 255, 0.08);
+            max-width: 520px;
             position: relative;
-            animation: cardGlow 3s ease-in-out infinite;
+            z-index: 1;
+            border: 1px solid var(--gold-soft);
+            padding: 34px 28px 30px;
+            background: transparent;
         }
 
-        @keyframes cardGlow {
-            0%, 100% {
-                box-shadow: 0 25px 45px rgba(0, 0, 0, 0.4), 0 0 80px rgba(0, 212, 255, 0.08);
-                border-color: rgba(0, 212, 255, 0.3);
-            }
-            50% {
-                box-shadow: 0 25px 45px rgba(0, 0, 0, 0.4), 0 0 95px rgba(0, 212, 255, 0.16);
-                border-color: rgba(0, 212, 255, 0.4);
-            }
+        .eyebrow {
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 0.35em;
+            color: rgba(242, 240, 228, 0.72);
+            font-size: 0.75rem;
+            margin-bottom: 12px;
         }
 
         h1 {
-            font-size: 1.8rem;
-            font-weight: 700;
+            font-family: 'Marcellus', serif;
             text-align: center;
-            margin-bottom: 8px;
-            color: #ffffff;
-            text-shadow: 0 0 30px rgba(0, 212, 255, 0.8), 0 0 60px rgba(0, 212, 255, 0.4);
-            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            letter-spacing: 0.22em;
+            color: var(--gold);
+            font-size: clamp(1.8rem, 3vw, 2.4rem);
+            font-weight: 400;
+            margin-bottom: 10px;
         }
 
         .subtitle {
             text-align: center;
-            color: #a0d4e8;
+            color: rgba(242, 240, 228, 0.82);
             font-size: 0.95rem;
-            margin-bottom: 32px;
+            margin-bottom: 26px;
         }
 
         .message {
             display: none;
-            margin-bottom: 20px;
-            padding: 12px 16px;
-            border-radius: 8px;
-            font-size: 0.9rem;
-            line-height: 1.4;
-            word-break: break-word;
-        }
-
-        .message.error {
-            background: rgba(255, 50, 50, 0.15);
-            border: 1px solid rgba(255, 50, 50, 0.3);
-            color: #ff6b6b;
-        }
-
-        .message.success {
-            background: rgba(50, 255, 100, 0.15);
-            border: 1px solid rgba(50, 255, 100, 0.3);
-            color: #4ade80;
+            margin-bottom: 18px;
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.3);
+            color: var(--cream);
+            font-size: 0.92rem;
+            line-height: 1.5;
+            text-align: center;
         }
 
         .form-group {
-            margin-bottom: 20px;
+            margin-bottom: 18px;
         }
 
         .role-specific {
             display: none;
-            opacity: 1;
-            transition: opacity 0.3s ease;
-        }
-
-        .role-specific.show {
-            display: block;
-            opacity: 1;
-            animation: fadeIn 0.35s ease;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-10px); }
-            to { opacity: 1; transform: translateY(0); }
+            margin-top: 2px;
         }
 
         label {
             display: block;
-            margin-bottom: 8px;
-            color: #c8e6f0;
+            margin-bottom: 10px;
+            color: rgba(242, 240, 228, 0.9);
             font-size: 0.9rem;
-            font-weight: 500;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
         }
 
         input,
         select,
         textarea {
             width: 100%;
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(0, 212, 255, 0.2);
-            border-radius: 10px;
-            padding: 14px 18px;
-            color: #ffffff;
-            font-size: 0.95rem;
+            border: none;
+            border-bottom: 2px solid rgba(212, 175, 55, 0.55);
+            background: transparent;
+            color: var(--cream);
+            padding: 12px 2px 10px;
+            font-size: 0.98rem;
             outline: none;
-            transition: all 0.3s ease;
+            transition: border-color 0.25s ease, box-shadow 0.25s ease, color 0.25s ease;
+            border-radius: 0;
         }
 
         textarea {
             resize: none;
+            min-height: 96px;
         }
 
         input::placeholder,
         select::placeholder,
         textarea::placeholder {
-            color: rgba(255, 255, 255, 0.5);
+            color: rgba(242, 240, 228, 0.42);
         }
 
         input:focus,
         select:focus,
         textarea:focus {
-            border-color: #00d4ff;
-            background: rgba(255, 255, 255, 0.1);
-            box-shadow: 0 0 15px rgba(0, 212, 255, 0.4), inset 0 0 10px rgba(0, 212, 255, 0.1);
+            border-bottom-color: var(--gold);
+            box-shadow: 0 10px 18px -14px var(--gold-glow);
         }
 
         select {
             appearance: none;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='rgba(255,255,255,0.6)' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
-            background-repeat: no-repeat;
-            background-position: right 12px center;
-            padding-right: 36px;
         }
 
         option {
-            background: #1a1a2e;
-            color: #fff;
+            background: #141414;
+            color: var(--cream);
         }
 
         button {
             width: 100%;
-            padding: 14px;
-            margin-top: 28px;
-            background: linear-gradient(135deg, #00e5ff, #0088ff);
-            border: none;
-            border-radius: 10px;
-            color: #ffffff;
+            margin-top: 10px;
+            border: 1px solid var(--gold);
+            background: transparent;
+            color: var(--gold);
+            padding: 14px 18px;
+            font-family: 'Marcellus', serif;
             font-size: 1rem;
-            font-weight: 700;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
             cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(0, 212, 255, 0.2);
+            transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease, color 0.25s ease;
+            border-radius: 0;
         }
 
         button:hover {
-            background: linear-gradient(135deg, #0088ff, #00e5ff);
-            transform: scale(1.02);
-            box-shadow: 0 0 30px rgba(0, 229, 255, 0.6);
-        }
-
-        button:active {
-            transform: scale(0.98);
+            transform: translateY(-2px);
+            background: var(--gold);
+            color: var(--obsidian);
+            box-shadow: 0 0 24px rgba(212, 175, 55, 0.28);
         }
 
         .footer-text {
             text-align: center;
-            margin-top: 24px;
-            color: #aaa;
-            font-size: 0.9rem;
+            margin-top: 22px;
+            color: rgba(242, 240, 228, 0.7);
+            font-size: 0.92rem;
         }
 
         .footer-text a {
-            color: #00e5ff;
+            color: var(--gold);
             text-decoration: none;
-            transition: all 0.3s ease;
+            border-bottom: 1px solid transparent;
+            transition: border-color 0.2s ease, color 0.2s ease;
         }
 
         .footer-text a:hover {
-            text-decoration: underline;
-            text-shadow: 0 0 10px rgba(0, 229, 255, 0.5);
+            border-bottom-color: var(--gold);
+            color: var(--cream);
         }
 
         @media (max-width: 600px) {
             body {
-                padding: 16px;
+                padding: 18px 14px;
             }
 
             .card {
-                padding: 28px 20px;
-            }
-
-            h1 {
-                font-size: 1.5rem;
-            }
-
-            .subtitle {
-                font-size: 0.9rem;
-                margin-bottom: 24px;
-            }
-
-            input,
-            select {
-                padding: 12px 14px;
-                font-size: 0.9rem;
-            }
-
-            button {
-                padding: 12px;
-                margin-top: 20px;
+                padding: 28px 18px 22px;
             }
         }
     </style>
 </head>
 <body>
-    <canvas id="particles-canvas"></canvas>
-
     <div class="card">
-        <h1>Agency Management System</h1>
-        <p class="subtitle">Create your account</p>
+        <div class="eyebrow">Minimalist Art Deco</div>
+        <h1>Register</h1>
+        <p class="subtitle">Join the empire with a refined profile.</p>
 
         <div id="message" class="message"></div>
 
         <form id="registerForm" method="POST" action="/auth/register">
             <div class="form-group">
                 <label for="username">Username</label>
-                <input
-                    type="text"
-                    id="username"
-                    name="username"
-                    placeholder="Choose a username"
-                    required
-                />
+                <input type="text" id="username" name="username" placeholder="Choose a username" required />
             </div>
 
             <div class="form-group">
                 <label for="password">Password</label>
-                <input
-                    type="password"
-                    id="password"
-                    name="password"
-                    placeholder="Choose a password"
-                    required
-                />
+                <input type="password" id="password" name="password" placeholder="Choose a password" required />
             </div>
 
             <div class="form-group">
                 <label for="confirm_password">Confirm Password</label>
-                <input
-                    type="password"
-                    id="confirm_password"
-                    name="confirm_password"
-                    placeholder="Confirm your password"
-                    required
-                />
+                <input type="password" id="confirm_password" name="confirm_password" placeholder="Confirm your password" required />
             </div>
 
             <div class="form-group">
@@ -305,25 +247,12 @@
 
             <div class="form-group">
                 <label for="name">Full Name</label>
-                <input
-                    type="text"
-                    id="name"
-                    name="name"
-                    placeholder="Enter your full name"
-                    required
-                />
+                <input type="text" id="name" name="name" placeholder="Enter your full name" required />
             </div>
 
             <div class="form-group">
                 <label for="age">Age</label>
-                <input
-                    type="number"
-                    id="age"
-                    name="age"
-                    placeholder="Enter your age"
-                    min="18"
-                    max="100"
-                />
+                <input type="number" id="age" name="age" placeholder="Enter your age" min="18" max="100" />
             </div>
 
             <div class="form-group">
@@ -338,42 +267,22 @@
 
             <div class="form-group">
                 <label for="contact">Contact Number</label>
-                <input
-                    type="tel"
-                    id="contact"
-                    name="contact"
-                    placeholder="Enter contact number"
-                />
+                <input type="tel" id="contact" name="contact" placeholder="Enter contact number" />
             </div>
 
             <div class="form-group">
                 <label for="address">Address</label>
-                <textarea
-                    id="address"
-                    name="address"
-                    placeholder="Enter full address"
-                    rows="3"
-                ></textarea>
+                <textarea id="address" name="address" placeholder="Enter full address" rows="3"></textarea>
             </div>
 
             <div id="agency-fields" class="role-specific">
                 <div class="form-group">
                     <label for="agency-type">Agency Type</label>
-                    <input
-                        type="text"
-                        id="agency-type"
-                        name="type"
-                        placeholder="e.g. Recruitment, Marketing, IT"
-                    />
+                    <input type="text" id="agency-type" name="type" placeholder="e.g. Recruitment, Marketing, IT" />
                 </div>
                 <div class="form-group">
                     <label for="agency-experience">Years of Experience</label>
-                    <input
-                        type="text"
-                        id="agency-experience"
-                        name="experience"
-                        placeholder="e.g. 5 years"
-                    />
+                    <input type="text" id="agency-experience" name="experience" placeholder="e.g. 5 years" />
                 </div>
                 <div class="form-group">
                     <label for="agency-work-shift">Work Shift</label>
@@ -390,26 +299,15 @@
             <div id="staff-fields" class="role-specific">
                 <div class="form-group">
                     <label for="staff-type">Staff Type</label>
-                    <input
-                        type="text"
-                        id="staff-type"
-                        name="type"
-                        placeholder="e.g. Security, Cleaner, Driver"
-                    />
+                    <input type="text" id="staff-type" name="type" placeholder="e.g. Security, Cleaner, Driver" />
                 </div>
                 <div class="form-group">
                     <label for="staff-experience">Years of Experience</label>
-                    <input
-                        type="text"
-                        id="staff-experience"
-                        name="experience"
-                        placeholder="e.g. 2 years"
-                    />
+                    <input type="text" id="staff-experience" name="experience" placeholder="e.g. 2 years" />
                 </div>
                 <div class="form-group">
-                    <label>Expected Salary (per month)</label>
-                    <input type="number" name="expected_salary" 
-                    placeholder="e.g. 25000" min="0" step="0.01">
+                    <label for="expected_salary">Expected Salary (per month)</label>
+                    <input type="number" id="expected_salary" name="expected_salary" placeholder="e.g. 25000" min="0" step="0.01" />
                 </div>
                 <div class="form-group">
                     <label for="staff-work-shift">Work Shift</label>
@@ -426,12 +324,7 @@
             <div id="client-fields" class="role-specific">
                 <div class="form-group">
                     <label for="client-type">Client Type</label>
-                    <input
-                        type="text"
-                        id="client-type"
-                        name="type"
-                        placeholder="e.g. Individual, Corporate, NGO"
-                    />
+                    <input type="text" id="client-type" name="type" placeholder="e.g. Individual, Corporate, NGO" />
                 </div>
                 <div class="form-group">
                     <label for="client-work-shift">Work Shift</label>
@@ -445,157 +338,33 @@
                 </div>
             </div>
 
-            <button type="submit">Register</button>
+            <button type="submit">Join the Empire</button>
         </form>
 
         <p class="footer-text">
-            Already have an account? <a href="/views/login.html">Login here</a>
+            Already have an account? <a href="/login">Login here</a>
         </p>
     </div>
 
     <script>
-        // Particle System
-        class ParticleSystem {
-            constructor() {
-                this.canvas = document.getElementById('particles-canvas');
-                this.ctx = this.canvas.getContext('2d');
-                this.particles = [];
-                this.mouseX = 0;
-                this.mouseY = 0;
-                this.particleCount = 120;
-
-                this.resize();
-                this.initParticles();
-                this.setupEventListeners();
-                this.animate();
-            }
-
-            resize() {
-                this.canvas.width = window.innerWidth;
-                this.canvas.height = window.innerHeight;
-            }
-
-            initParticles() {
-                this.particles = [];
-                for (let i = 0; i < this.particleCount; i++) {
-                    this.particles.push({
-                        x: Math.random() * this.canvas.width,
-                        y: Math.random() * this.canvas.height,
-                        vx: (Math.random() - 0.5) * 0.5,
-                        vy: (Math.random() - 0.5) * 0.5,
-                        radius: Math.random() * 1.5 + 1.5,
-                        opacity: Math.random() * 0.3 + 0.7,
-                        color: ['#00ffff', '#00bfff', '#7df9ff'][Math.floor(Math.random() * 3)]
-                    });
-                }
-            }
-
-            setupEventListeners() {
-                window.addEventListener('resize', () => this.resize());
-                document.addEventListener('mousemove', (e) => {
-                    this.mouseX = e.clientX;
-                    this.mouseY = e.clientY;
-                });
-            }
-
-            update() {
-                for (let particle of this.particles) {
-                    // Move particle
-                    particle.x += particle.vx;
-                    particle.y += particle.vy;
-
-                    // Bounce off edges
-                    if (particle.x - particle.radius < 0 || particle.x + particle.radius > this.canvas.width) {
-                        particle.vx *= -1;
-                    }
-                    if (particle.y - particle.radius < 0 || particle.y + particle.radius > this.canvas.height) {
-                        particle.vy *= -1;
-                    }
-
-                    // Keep within bounds
-                    particle.x = Math.max(particle.radius, Math.min(this.canvas.width - particle.radius, particle.x));
-                    particle.y = Math.max(particle.radius, Math.min(this.canvas.height - particle.radius, particle.y));
-
-                    // Attraction to mouse
-                    const dx = this.mouseX - particle.x;
-                    const dy = this.mouseY - particle.y;
-                    const distance = Math.sqrt(dx * dx + dy * dy);
-
-                    if (distance < 150) {
-                        particle.vx += (dx / distance) * 0.03;
-                        particle.vy += (dy / distance) * 0.03;
-                    }
-                }
-            }
-
-            draw() {
-                this.ctx.fillStyle = '#0d1b2a';
-                this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
-
-                // Draw lines between nearby particles
-                for (let i = 0; i < this.particles.length; i++) {
-                    for (let j = i + 1; j < this.particles.length; j++) {
-                        const dx = this.particles[i].x - this.particles[j].x;
-                        const dy = this.particles[i].y - this.particles[j].y;
-                        const distance = Math.sqrt(dx * dx + dy * dy);
-
-                        if (distance < 120) {
-                            this.ctx.strokeStyle = `rgba(0, 212, 255, ${(1 - distance / 120) * 0.45})`;
-                            this.ctx.lineWidth = 1;
-                            this.ctx.beginPath();
-                            this.ctx.moveTo(this.particles[i].x, this.particles[i].y);
-                            this.ctx.lineTo(this.particles[j].x, this.particles[j].y);
-                            this.ctx.stroke();
-                        }
-                    }
-                }
-
-                // Draw particles
-                for (let particle of this.particles) {
-                    this.ctx.fillStyle = particle.color;
-                    this.ctx.globalAlpha = particle.opacity;
-                    this.ctx.beginPath();
-                    this.ctx.arc(particle.x, particle.y, particle.radius, 0, Math.PI * 2);
-                    this.ctx.fill();
-                    this.ctx.globalAlpha = 1;
-                }
-            }
-
-            animate() {
-                this.update();
-                this.draw();
-                requestAnimationFrame(() => this.animate());
-            }
-        }
-
-        // Initialize particle system
-        new ParticleSystem();
-
-        // URL error/success messages
         window.addEventListener('DOMContentLoaded', () => {
             const params = new URLSearchParams(window.location.search);
             const error = params.get('error');
             const success = params.get('success');
             const msgDiv = document.getElementById('message');
+
             if (msgDiv) {
                 if (error) {
                     msgDiv.style.display = 'block';
-                    msgDiv.style.color = '#ff4444';
-                    msgDiv.style.background = 'rgba(255,50,50,0.15)';
-                    msgDiv.style.border = '1px solid rgba(255,50,50,0.3)';
                     msgDiv.textContent = error;
                 }
                 if (success) {
                     msgDiv.style.display = 'block';
-                    msgDiv.style.color = '#00ff88';
-                    msgDiv.style.background = 'rgba(50,255,100,0.15)';
-                    msgDiv.style.border = '1px solid rgba(50,255,100,0.3)';
                     msgDiv.textContent = success;
                 }
             }
         });
 
-        // Role based field show/hide
         const roleSelect = document.getElementById('role');
         const agencyFields = document.getElementById('agency-fields');
         const staffFields = document.getElementById('staff-fields');
@@ -610,7 +379,7 @@
         hideAllRoleFields();
 
         if (roleSelect) {
-            roleSelect.addEventListener('change', function() {
+            roleSelect.addEventListener('change', function () {
                 hideAllRoleFields();
                 const selected = this.value;
                 if (selected === 'agency' && agencyFields) {
@@ -623,48 +392,34 @@
             });
         }
 
-        // Form submit validation
         const registerForm = document.getElementById('registerForm');
         if (registerForm) {
-            registerForm.addEventListener('submit', function(e) {
+            registerForm.addEventListener('submit', function (e) {
                 const password = document.getElementById('password');
                 const confirmPassword = document.getElementById('confirm_password');
                 const contact = document.getElementById('contact');
                 const msgDiv = document.getElementById('message');
 
-                // Password match check
-                if (password && confirmPassword) {
-                    if (password.value !== confirmPassword.value) {
-                        e.preventDefault();
-                        if (msgDiv) {
-                            msgDiv.style.display = 'block';
-                            msgDiv.style.color = '#ff4444';
-                            msgDiv.style.background = 'rgba(255,50,50,0.15)';
-                            msgDiv.style.border = '1px solid rgba(255,50,50,0.3)';
-                            msgDiv.textContent = 'Passwords do not match';
-                        }
-                        return;
+                if (password && confirmPassword && password.value !== confirmPassword.value) {
+                    e.preventDefault();
+                    if (msgDiv) {
+                        msgDiv.style.display = 'block';
+                        msgDiv.textContent = 'Passwords do not match';
                     }
+                    return;
                 }
 
-                // Contact number check
                 if (contact && contact.value) {
                     const contactVal = contact.value.trim();
                     if (contactVal.length !== 10 || isNaN(contactVal)) {
                         e.preventDefault();
                         if (msgDiv) {
                             msgDiv.style.display = 'block';
-                            msgDiv.style.color = '#ff4444';
-                            msgDiv.style.background = 'rgba(255,50,50,0.15)';
-                            msgDiv.style.border = '1px solid rgba(255,50,50,0.3)';
                             msgDiv.textContent = 'Contact number must be exactly 10 digits';
                         }
                         return;
                     }
                 }
-
-                // If all good let form submit naturally
-                return true;
             });
         }
     </script>
