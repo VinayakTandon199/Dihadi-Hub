@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Agency Dashboard</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Segoe UI", sans-serif;
+      min-height: 100vh;
+      background: linear-gradient(135deg, #f0f4ff, #e8f0fe);
+      color: #0f172a;
+    }
+    .navbar {
+      height: 72px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 24px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: #fff;
+    }
+    .wrap {
+      max-width: 1200px;
+      margin: 24px auto;
+      padding: 0 16px;
+      display: grid;
+      gap: 16px;
+    }
+    .card {
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 10px 24px rgba(37, 99, 235, 0.12);
+      border: 1px solid rgba(37, 99, 235, 0.1);
+      padding: 20px;
+    }
+    .title { margin: 0 0 6px; color: #1e3a5f; }
+    .sub { margin: 0 0 14px; color: #64748b; }
+    .message { padding: 12px 14px; border-radius: 10px; margin-bottom: 12px; display: none; }
+    .message.success { background: #dcfce7; color: #166534; }
+    .message.error { background: #fee2e2; color: #991b1b; }
+    .request-grid { display: grid; gap: 14px; }
+    .request { border: 1px solid #e2e8f0; border-radius: 14px; padding: 16px; background: #f8fbff; }
+    .req-head { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; align-items: center; }
+    .req-name { font-weight: 800; color: #1e3a5f; }
+    .badge { padding: 6px 10px; border-radius: 999px; font-size: 12px; font-weight: 700; }
+    .pending { background: #dbeafe; color: #1d4ed8; }
+    .accepted { background: #dcfce7; color: #166534; }
+    .rejected { background: #fee2e2; color: #991b1b; }
+    .meta { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin-top: 12px; }
+    .meta div { background: #fff; border-radius: 10px; padding: 10px 12px; border: 1px solid #e2e8f0; }
+    .actions { margin-top: 12px; display: flex; gap: 10px; flex-wrap: wrap; }
+    .request-card {
+      background: #fff;
+      border-radius: 15px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+      border-left: 5px solid #4a90e2;
+      padding: 18px;
+      display: grid;
+      gap: 12px;
+    }
+    .request-card-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .request-card-main {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+    .request-card-field {
+      background: #f8fbff;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 10px 12px;
+      color: #1e293b;
+      font-size: 14px;
+    }
+    .pending-badge {
+      background: #fff3cd;
+      color: #856404;
+      padding: 5px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+    .info-list {
+      display: grid;
+      gap: 8px;
+    }
+    .info-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      background: #f8fbff;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 10px 12px;
+      color: #334155;
+      font-size: 14px;
+    }
+    .request-card-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .accept-btn {
+      background: #4a90e2;
+      color: #fff;
+      border: 1px solid #4a90e2;
+      border-radius: 10px;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .accept-btn:hover {
+      transform: scale(1.04);
+      box-shadow: 0 8px 18px rgba(74, 144, 226, 0.35);
+    }
+    .reject-btn {
+      background: #fff;
+      color: #e53e3e;
+      border: 1px solid #e53e3e;
+      border-radius: 10px;
+      transition: background-color 0.2s ease, color 0.2s ease;
+    }
+    .reject-btn:hover {
+      background: #e53e3e;
+      color: #fff;
+    }
+    button { border: none; border-radius: 10px; padding: 10px 14px; font-weight: 700; cursor: pointer; }
+    .accept { background: linear-gradient(135deg, #16a34a, #15803d); color: #fff; }
+    .reject { background: linear-gradient(135deg, #ef4444, #b91c1c); color: #fff; }
+    .refresh { background: linear-gradient(135deg, #1e3a5f, #2563eb); color: #fff; }
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+    }
+    .modal.active {
+      display: flex;
+    }
+    .modal-content {
+      background: #fff;
+      border-radius: 20px;
+      max-width: 600px;
+      width: 90%;
+      max-height: 80vh;
+      overflow-y: auto;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+    }
+    .modal-header {
+      padding: 24px;
+      background: linear-gradient(135deg, #1e3a5f, #2563eb);
+      color: #fff;
+      border-radius: 20px 20px 0 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .modal-header h2 {
+      margin: 0;
+      font-size: 20px;
+    }
+    .modal-close {
+      background: none;
+      border: none;
+      color: #fff;
+      font-size: 24px;
+      cursor: pointer;
+      padding: 0;
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+    }
+    .modal-close:hover {
+      transform: rotate(90deg);
+      opacity: 0.8;
+    }
+    .modal-body {
+      padding: 24px;
+    }
+    .requested-count {
+      background: linear-gradient(135deg, #dbeafe, #bfdbfe);
+      padding: 16px;
+      border-radius: 12px;
+      margin-bottom: 20px;
+      border-left: 4px solid #2563eb;
+    }
+    .requested-count strong {
+      color: #1e3a5f;
+    }
+    .staff-list {
+      display: grid;
+      gap: 12px;
+    }
+    .staff-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px;
+      border: 2px solid #e2e8f0;
+      border-radius: 12px;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      background: #f8fbff;
+    }
+    .staff-item:hover {
+      border-color: #2563eb;
+      background: linear-gradient(135deg, #f0f4ff, #e8f0fe);
+      transform: translateX(4px);
+    }
+    .staff-item.disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+    .staff-item.selected {
+      background: linear-gradient(135deg, #dbeafe, #bfdbfe);
+      border-color: #2563eb;
+    }
+    .staff-item input[type="checkbox"] {
+      cursor: pointer;
+      width: 20px;
+      height: 20px;
+      accent-color: #2563eb;
+    }
+    .staff-info {
+      flex: 1;
+    }
+    .staff-name {
+      font-weight: 700;
+      color: #1e3a5f;
+    }
+    .staff-details {
+      font-size: 13px;
+      color: #64748b;
+      margin-top: 4px;
+    }
+    .modal-footer {
+      padding: 20px 24px;
+      border-top: 1px solid #e2e8f0;
+      display: flex;
+      gap: 12px;
+      justify-content: flex-end;
+    }
+    .btn-cancel {
+      background: #e2e8f0;
+      color: #0f172a;
+    }
+    .btn-cancel:hover {
+      background: #cbd5e1;
+    }
+    .btn-deploy {
+      background: linear-gradient(135deg, #16a34a, #15803d);
+      color: #fff;
+      transition: all 0.3s ease;
+    }
+    .btn-deploy:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 16px rgba(22, 163, 74, 0.3);
+    }
+    .btn-deploy:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    .empty-staff {
+      text-align: center;
+      padding: 32px 16px;
+      color: #64748b;
+    }
+    .toast {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      padding: 16px 20px;
+      border-radius: 12px;
+      color: #fff;
+      font-weight: 600;
+      animation: slideIn 0.3s ease;
+      z-index: 2000;
+      max-width: 300px;
+    }
+    .toast.success {
+      background: linear-gradient(135deg, #16a34a, #15803d);
+    }
+    .toast.error {
+      background: linear-gradient(135deg, #ef4444, #b91c1c);
+    }
+    @keyframes slideIn {
+      from {
+        transform: translateX(400px);
+        opacity: 0;
+      }
+      to {
+        transform: translateX(0);
+        opacity: 1;
+      }
+    }
+    @media (max-width: 720px) {
+      .meta { grid-template-columns: 1fr; }
+      .request-card-main { grid-template-columns: 1fr; }
+      .modal-content {
+        width: 95%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="navbar">
+    <div>
+      <div style="font-weight:800; font-size:18px;">Agency Management System</div>
+      <h1 id="display-agency-name" style="margin:4px 0 0; font-size:20px; font-weight:800; line-height:1.1;">Agency Dashboard</h1>
+    </div>
+    <a href="/auth/logout" style="color:#fff; text-decoration:none; font-weight:700;">Logout</a>
+  </header>
+
+  <!-- Staff Selection Modal -->
+  <div id="staffModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 id="modalTitle">Deploy Staff</h2>
+        <button type="button" class="modal-close" id="modalClose">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="requested-count">
+          <strong>Requested Count:</strong> <span id="requestedCount">0</span> staff needed
+        </div>
+        <div id="staffListContainer" class="staff-list"></div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="reject btn-cancel" id="btnCancel">Cancel</button>
+        <button type="button" class="accept btn-deploy" id="btnDeploy" disabled>Confirm & Deploy</button>
+      </div>
+    </div>
+  </div>
+
+  <main class="wrap">
+    <h1 id='agency-name-header' style='color: #2d3748;'></h1>
+    <section class="card">
+      <h1 class="title">Incoming Contract Requests</h1>
+      <p class="sub">Review pending requests from clients and accept or reject them.</p>
+      <div id="messageBox" class="message"></div>
+      <button id="refreshBtn" class="refresh" type="button">Refresh Requests</button>
+    </section>
+
+    <section class="card">
+      <div id="requestsContainer" class="request-grid"></div>
+    </section>
+  </main>
+
+  <script>
+    const requestsContainer = document.getElementById('requestsContainer');
+    const messageBox = document.getElementById('messageBox');
+    const refreshBtn = document.getElementById('refreshBtn');
+    const agencyNameHeader = document.getElementById('agency-name-header');
+    const displayAgencyName = document.getElementById('display-agency-name');
+    
+    // Modal elements
+    const staffModal = document.getElementById('staffModal');
+    const modalClose = document.getElementById('modalClose');
+    const btnCancel = document.getElementById('btnCancel');
+    const btnDeploy = document.getElementById('btnDeploy');
+    const modalTitle = document.getElementById('modalTitle');
+    const staffListContainer = document.getElementById('staffListContainer');
+    const requestedCountSpan = document.getElementById('requestedCount');
+    
+    // Modal state
+    let currentRequestId = null;
+    let currentRequestInfo = null;
+    let selectedStaffIds = [];
+    let requiredCount = 0;
+
+    function showMessage(type, text) {
+      messageBox.className = 'message ' + type;
+      messageBox.textContent = text;
+      messageBox.style.display = 'block';
+    }
+
+    function hideMessage() {
+      messageBox.style.display = 'none';
+    }
+
+    function showToast(type, text) {
+      const toast = document.createElement('div');
+      toast.className = 'toast ' + type;
+      toast.textContent = text;
+      document.body.appendChild(toast);
+      
+      setTimeout(() => {
+        toast.remove();
+      }, 3000);
+    }
+
+    function openModal() {
+      staffModal.classList.add('active');
+    }
+
+    function closeModal() {
+      staffModal.classList.remove('active');
+      modalTitle.textContent = 'Deploy Staff';
+      currentRequestId = null;
+      currentRequestInfo = null;
+      selectedStaffIds = [];
+      requiredCount = 0;
+    }
+
+    async function fetchAvailableStaff(type) {
+      try {
+        const response = await fetch(`/agency/available-staff?type=${encodeURIComponent(type)}&agency_id=10`, {
+          headers: { Accept: 'application/json' }
+        });
+        const data = await response.json();
+        
+        if (!response.ok) {
+          throw new Error(data.message || 'Failed to load staff');
+        }
+
+        return Array.isArray(data) ? data : [];
+      } catch (error) {
+        showToast('error', error.message || 'Failed to load staff');
+        return [];
+      }
+    }
+
+    function displayStaffList(staffList) {
+      staffListContainer.innerHTML = '';
+
+      if (staffList.length === 0) {
+        staffListContainer.innerHTML = '<div class="empty-staff">No available staff found for this type.</div>';
+        btnDeploy.disabled = true;
+        return;
+      }
+
+      staffList.forEach((staff, index) => {
+        const staffItem = document.createElement('div');
+        staffItem.className = 'staff-item';
+        staffItem.innerHTML = `
+          <input type="checkbox" value="${staff.id}" data-index="${index}">
+          <div class="staff-info">
+            <div class="staff-name">${staff.name || 'N/A'}</div>
+            <div class="staff-details">Age: ${staff.age ?? 'N/A'} | Experience: ${staff.experience ?? 'N/A'} years</div>
+          </div>
+        `;
+
+        const checkbox = staffItem.querySelector('input[type="checkbox"]');
+        
+        checkbox.addEventListener('change', (e) => {
+          const selectedStaffId = Number(e.target.value);
+          handleStaffSelection(e.target, staffItem, selectedStaffId);
+        });
+
+        staffListContainer.appendChild(staffItem);
+      });
+
+      updateCheckboxStates();
+    }
+
+    function handleStaffSelection(checkbox, staffItem, staffId) {
+      if (checkbox.checked) {
+        if (selectedStaffIds.length < requiredCount) {
+          selectedStaffIds.push(staffId);
+          staffItem.classList.add('selected');
+        } else {
+          checkbox.checked = false;
+        }
+      } else {
+        selectedStaffIds = selectedStaffIds.filter(id => id !== staffId);
+        staffItem.classList.remove('selected');
+      }
+
+      updateCheckboxStates();
+    }
+
+    function updateCheckboxStates() {
+      const checkboxes = staffListContainer.querySelectorAll('input[type="checkbox"]');
+      const canSelectMore = selectedStaffIds.length < requiredCount;
+
+      checkboxes.forEach((checkbox) => {
+        const staffItem = checkbox.closest('.staff-item');
+        
+        if (!checkbox.checked && !canSelectMore) {
+          staffItem.classList.add('disabled');
+          checkbox.disabled = true;
+        } else {
+          staffItem.classList.remove('disabled');
+          checkbox.disabled = false;
+        }
+      });
+
+      // Enable deploy button only if required count is selected
+      btnDeploy.disabled = selectedStaffIds.length !== requiredCount;
+    }
+
+    async function openStaffSelectionModal(requestId, requestInfo) {
+      currentRequestId = requestId;
+      currentRequestInfo = requestInfo;
+      requiredCount = requestInfo.staff_count || 1;
+      selectedStaffIds = [];
+      modalTitle.textContent = `Deploy Staff for ${requestInfo.client_name || 'Client'}`;
+
+      requestedCountSpan.textContent = requiredCount;
+      staffListContainer.innerHTML = '<div class="empty-staff">Loading staff...</div>';
+      btnDeploy.disabled = true;
+
+      openModal();
+
+      // Fetch available staff
+      const staffList = await fetchAvailableStaff(requestInfo.staff_type);
+      displayStaffList(staffList);
+    }
+
+    async function deployStaff() {
+      if (selectedStaffIds.length !== requiredCount) {
+        showToast('error', `Please select exactly ${requiredCount} staff members`);
+        return;
+      }
+
+      try {
+        btnDeploy.disabled = true;
+        btnDeploy.textContent = 'Deploying...';
+
+        const response = await fetch('/agency/requests/' + encodeURIComponent(currentRequestId) + '/accept', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+          body: JSON.stringify({ selectedStaffIds: selectedStaffIds })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok || !data.success) {
+          throw new Error(data.message || 'Deployment failed');
+        }
+
+        closeModal();
+        showToast('success', 'Staff deployed successfully!');
+        await fetchRequests();
+      } catch (error) {
+        showToast('error', error.message || 'Deployment failed');
+        btnDeploy.disabled = false;
+        btnDeploy.textContent = 'Confirm & Deploy';
+      }
+    }
+
+    function badgeClass(status) {
+      if (status === 'accepted') return 'badge accepted';
+      if (status === 'rejected') return 'badge rejected';
+      return 'badge pending';
+    }
+
+    function formatDate(value) {
+      if (!value) return 'N/A';
+      const date = new Date(value);
+      return Number.isNaN(date.getTime()) ? 'N/A' : date.toLocaleDateString();
+    }
+
+    function renderRequests(requests) {
+      requestsContainer.innerHTML = '';
+
+      requests.forEach((req) => {
+        const card = document.createElement('div');
+        card.className = 'request-card';
+        card.innerHTML = `
+          <div class="request-card-top">
+            <div class="req-name">Client: ${req.client_name || 'N/A'}</div>
+            <span class="pending-badge">Pending</span>
+          </div>
+          <div class="request-card-main">
+            <div class="request-card-field"><strong>Staff Type:</strong> ${req.staff_type || 'N/A'}</div>
+            <div class="request-card-field"><strong>Shift:</strong> ${req.work_shift || 'N/A'}</div>
+            <div class="request-card-field"><strong>Staff Needed:</strong> ${req.staff_count ?? 'N/A'}</div>
+          </div>
+          <div class="info-list">
+            <div class="info-item">📍 <span><strong>Address:</strong> ${req.address || 'N/A'}</span></div>
+            <div class="info-item">📅 <span><strong>Dates:</strong> ${formatDate(req.start_date)} to ${req.end_date ? formatDate(req.end_date) : 'N/A'}</span></div>
+          </div>
+          <div class="request-card-actions">
+            <button type="button" class="accept-btn" data-id="${req.id}" data-type="${req.staff_type}" data-count="${req.staff_count}" data-client="${req.client_name || 'Client'}">Accept</button>
+            <button type="button" class="reject-btn" data-id="${req.id}">Reject</button>
+          </div>
+        `;
+
+        requestsContainer.appendChild(card);
+      });
+
+      requestsContainer.querySelectorAll('.accept-btn').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const requestId = btn.dataset.id;
+          const staffType = btn.dataset.type;
+          const staffCount = parseInt(btn.dataset.count, 10);
+          const clientName = btn.dataset.client;
+
+          openStaffSelectionModal(requestId, { staff_type: staffType, staff_count: staffCount, client_name: clientName });
+        });
+      });
+
+      requestsContainer.querySelectorAll('.reject-btn').forEach((btn) => {
+        btn.addEventListener('click', async () => {
+          const requestId = btn.dataset.id;
+
+          try {
+            const response = await fetch('/agency/requests/' + encodeURIComponent(requestId) + '/reject', {
+              method: 'POST',
+              headers: { Accept: 'application/json' }
+            });
+
+            const data = await response.json().catch(() => ({}));
+            if (!response.ok || !data.success) {
+              throw new Error(data.message || 'Rejection failed');
+            }
+
+            showToast('success', 'Request rejected successfully');
+            await fetchRequests();
+          } catch (error) {
+            showToast('error', error.message || 'Rejection failed');
+          }
+        });
+      });
+    }
+
+    async function fetchRequests() {
+      hideMessage();
+      requestsContainer.innerHTML = '<div class="request">Loading requests...</div>';
+
+      try {
+        const response = await fetch('/agency/requests', { headers: { Accept: 'application/json' } });
+        const data = await response.json();
+        const client2Requests = Array.isArray(data)
+          ? data.filter((item) => Number(item.client_id) === 7 || String(item.client_name || '').toLowerCase() === 'client2')
+          : [];
+        const dashboardData = {
+          agencyName: (Array.isArray(data) && data[0]?.agency_name) || 'Agency Dashboard',
+          requests: client2Requests
+        };
+
+        document.getElementById('agency-name-header').innerText = dashboardData.agencyName;
+
+        if (!response.ok) {
+          throw new Error(data.message || 'Failed to load requests');
+        }
+
+        if (!dashboardData.requests.length) {
+          displayAgencyName.textContent = 'Agency Dashboard';
+          agencyNameHeader.innerText = 'Agency Dashboard';
+          requestsContainer.innerHTML = '<div class="request">No contract requests found.</div>';
+          return;
+        }
+
+        displayAgencyName.textContent = dashboardData.agencyName;
+        renderRequests(dashboardData.requests);
+      } catch (error) {
+        requestsContainer.innerHTML = '<div class="request">Unable to load requests.</div>';
+        showMessage('error', error.message || 'Unable to load requests');
+      }
+    }
+
+    // Modal event listeners
+    modalClose.addEventListener('click', closeModal);
+    btnCancel.addEventListener('click', closeModal);
+    btnDeploy.addEventListener('click', deployStaff);
+    
+    // Close modal when clicking outside
+    staffModal.addEventListener('click', (e) => {
+      if (e.target === staffModal) {
+        closeModal();
+      }
+    });
+
+    refreshBtn.addEventListener('click', fetchRequests);
+    fetchRequests();
+  </script>
+</body>
+</html>
